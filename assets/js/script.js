@@ -20,9 +20,9 @@ var loadSavedCities = function(){
             savedCitiesEl.appendChild(item);
             
         }
-        searched.push(savedCities);
+        
     }
-
+    
 }
 
 
