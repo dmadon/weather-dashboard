@@ -1,0 +1,11 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.gradient{
+    background: rgb(59,110,196);
+    background: linear-gradient(90deg, rgba(59,110,196,1) 0%, rgba(51,78,160,1) 24%, rgba(35,5,85,1) 100%);
+}
+#btn-search{
+    background: #5AA2E9;
+    border: none;
+}
