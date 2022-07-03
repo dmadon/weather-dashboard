@@ -1,6 +1,10 @@
 var inputEl = document.querySelector("#city-input");
 var savedCitiesEl = document.querySelector("#saved-cities-holder");
 var searchBtnEl = document.querySelector("#btn-search");
+var currentWeatherEl = document.querySelector("#current");
+
+
+
 
 
 // BEGIN loadSavedCities FUNCTION
@@ -24,6 +28,8 @@ var loadSavedCities = function(){
 }// end loadSavedCities function
 
 loadSavedCities();
+
+
 
 // BEGIN SEARCH BUTTON FUNCTION
 var search = function(event){
@@ -56,11 +62,66 @@ var search = function(event){
             item.classList=("btn  col-12 mt-3 city-btn");
             item.setAttribute("data-query-value",inputEl.value);
             item.textContent=(inputEl.value);
+            var city=(inputEl.value);
             savedCitiesEl.prepend(item);
             inputEl.value=("");
+
+
+        getWeather(city);
     }
     return;
 }// end search button function
+
+
+var getWeather = function(city){
+
+    var currentDateTime = new Date();
+    var date = currentDateTime.getMonth()+"/"+currentDateTime.getDate()+"/"+currentDateTime.getFullYear();
+   
+    var APIkey = "568a27ffc728ed645193b7db830d13da";
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+APIkey+"&units=imperial";
+
+
+    fetch(queryURL)
+        .then(function(response){
+            if(response.ok){
+                response.json().then(function(data){
+                    console.log(data);
+                    var cityHeading = document.createElement("h1");
+                    cityHeading.className=("fw-bold");
+                    cityHeading.innerHTML=(data.name+" ("+date+")"+"<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png'></img>");
+                    currentWeatherEl.appendChild(cityHeading);
+
+                    var currentTemp = document.createElement("h3");
+                    currentTemp.textContent=("Temp: "+data.main.temp+"\xB0F");
+                    currentWeatherEl.appendChild(currentTemp);
+
+
+                })
+            }// end of if statement
+            else{
+                console.log("response is not okay");
+            }// end of else statement
+        })
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
