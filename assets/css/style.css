@@ -20,8 +20,9 @@ body{
     color:#ffffff;
 }
 .bg-secondary{
-    background-color: orangered;
+    background-color: #ff9710!important;
 }
-.bg-dark{
-    background-color: purple;
+.bg-info{
+    background-color: purple!important;
+    color: #ffffff;
 }

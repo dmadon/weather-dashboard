@@ -92,8 +92,6 @@ var getWeather = function(city){
                     var currentWeatherArticle = document.createElement("article");
                     currentWeatherArticle.id=("article");
 
-
-
                     
                     // display selected city name, date, and weather icon
                     var cityHeading = document.createElement("h2");
@@ -142,7 +140,7 @@ var getWeather = function(city){
                                     uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-danger'>"+data.current.uvi+"</span>");
                                 }
                                 else if(data.current.uvi>10.9){
-                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-dark'>"+data.current.uvi+"</span>");
+                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-info'>"+data.current.uvi+"</span>");
                                 }
                         })
                     })
@@ -150,28 +148,48 @@ var getWeather = function(city){
                         document.getElementById("article").remove();
                         currentWeatherEl.appendChild(currentWeatherArticle);
                     }
-                    else{  
+                    else if(document.getElementById("warningMsg")){
+                        document.getElementById("warningMsg").remove();
                         currentWeatherEl.appendChild(currentWeatherArticle);
                     }
-
+                    else{  
+                        currentWeatherEl.appendChild(currentWeatherArticle);
+                    }     
+                })// end of if statement for when response is OK
+        
             
-            // ADD ERROR HANDLING HERE FOR ERROR 404 - NEED CATCH STATEMENT
 
+            .catch(function(error) {
+                $("#errorModal").modal();
+            })
+        }
             
-                })
-            }// end of if statement
+
             else if (document.getElementById("article")){
                     document.getElementById("article").remove();
                     var noCities = document.createElement("h1");
-                    noCities.textContent=("No cities found, please try again.");
+                    noCities.id=("warningMsg");
+                    noCities.textContent=("No cities found, please try again.");          
                     currentWeatherEl.appendChild(noCities);
                 }
                 else{  
-                    currentWeatherEl.appendChild(currentWeatherArticle);
+                    var noCities = document.createElement("h1");
+                    noCities.id=("warningMsg");
+                    noCities.textContent=("No cities found, please try again.");  
+                    currentWeatherEl.appendChild(noCities);
                 }
                 
         })// end of else statement
            
+}
+
+
+
+
+var savedCityBtn = function(event){
+    var city = event.target.getAttribute("data-query-value");
+    console.log("I just clicked "+city);
+    getWeather(city);
 }
 
 
@@ -186,9 +204,6 @@ var getWeather = function(city){
 
 
 
-
-
-
-
-
 searchBtnEl.addEventListener("click", search);
+
+savedCitiesEl.addEventListener("click",savedCityBtn);
