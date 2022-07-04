@@ -89,26 +89,32 @@ var getWeather = function(city){
             if(response.ok){
                 response.json().then(function(data){
                     console.log(data);
+                    var currentWeatherArticle = document.createElement("article");
+                    currentWeatherArticle.id=("article");
+
+
+
+                    
                     // display selected city name, date, and weather icon
                     var cityHeading = document.createElement("h2");
                     cityHeading.className=("fw-bold");
                     cityHeading.innerHTML=(data.name+" ("+date+")"+"<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png'></img>");
-                    currentWeatherEl.appendChild(cityHeading);
+                    currentWeatherArticle.appendChild(cityHeading);
                     // get and display current temperature
                     var currentTemp = document.createElement("h5");
                     currentTemp.className=("mb-4");
                     currentTemp.textContent=("Temp: "+data.main.temp+"\xB0F");
-                    currentWeatherEl.appendChild(currentTemp);
+                    currentWeatherArticle.appendChild(currentTemp);
                     // get and display current wind speed
                     var currentWindSpeed = document.createElement("h5");
                     currentWindSpeed.className=("mb-4");
                     currentWindSpeed.textContent=("Wind: "+data.wind.speed+"MPH");
-                    currentWeatherEl.appendChild(currentWindSpeed);
+                    currentWeatherArticle.appendChild(currentWindSpeed);
                     // get and display current humidity
                     var currentHumidity = document.createElement("h5");
                     currentHumidity.className=("mb-4");
                     currentHumidity.textContent=("Humidity: "+data.main.humidity+"%");
-                    currentWeatherEl.appendChild(currentHumidity);
+                    currentWeatherArticle.appendChild(currentHumidity);
 
                     // get and display current uv index
                     var lat = data.coord.lat;
@@ -122,19 +128,50 @@ var getWeather = function(city){
                                 console.log(data);
                                 var uvIndex = document.createElement("h5");
                                 uvIndex.className=("mb-4");
-                                uvIndex.textContent=("UV Index: "+data.current.uvi);
-                                currentWeatherEl.appendChild(uvIndex);
+                                currentWeatherArticle.appendChild(uvIndex);
+                                if(data.current.uvi<=2){
+                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-success'>"+data.current.uvi+"</span>");
+                                }
+                                else if(data.current.uvi>2 && data.current.uvi<=5.9 ){
+                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-warning'>"+data.current.uvi+"</span>");
+                                }
+                                else if(data.current.uvi>5.9 && data.current.uvi<=7.9){
+                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-secondary'>"+data.current.uvi+"</span>");
+                                }
+                                else if(data.current.uvi>7.9 && data.current.uvi<=10.9){
+                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-danger'>"+data.current.uvi+"</span>");
+                                }
+                                else if(data.current.uvi>10.9){
+                                    uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-dark'>"+data.current.uvi+"</span>");
+                                }
                         })
                     })
-                    
+                    if(document.getElementById("article")){
+                        document.getElementById("article").remove();
+                        currentWeatherEl.appendChild(currentWeatherArticle);
+                    }
+                    else{  
+                        currentWeatherEl.appendChild(currentWeatherArticle);
+                    }
+
+            
+            // ADD ERROR HANDLING HERE FOR ERROR 404 - NEED CATCH STATEMENT
+
+            
                 })
             }// end of if statement
-            else{
-                var noCities = document.createElement("h1");
-                noCities.textContent=("No cities found, please try again.");
-                currentWeatherEl.appendChild(noCities);
-            }// end of else statement
-        })
+            else if (document.getElementById("article")){
+                    document.getElementById("article").remove();
+                    var noCities = document.createElement("h1");
+                    noCities.textContent=("No cities found, please try again.");
+                    currentWeatherEl.appendChild(noCities);
+                }
+                else{  
+                    currentWeatherEl.appendChild(currentWeatherArticle);
+                }
+                
+        })// end of else statement
+           
 }
 
 

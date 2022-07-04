@@ -16,3 +16,12 @@ body{
 .hidden{
     display: none;
 }
+.bg-success{
+    color:#ffffff;
+}
+.bg-secondary{
+    background-color: orangered;
+}
+.bg-dark{
+    background-color: purple;
+}
