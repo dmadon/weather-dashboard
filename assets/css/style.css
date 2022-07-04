@@ -13,3 +13,6 @@ body{
     background: #B7B7B7;
     color:black;
 }
+.hidden{
+    display: none;
+}

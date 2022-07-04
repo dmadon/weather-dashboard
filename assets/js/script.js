@@ -2,6 +2,7 @@ var inputEl = document.querySelector("#city-input");
 var savedCitiesEl = document.querySelector("#saved-cities-holder");
 var searchBtnEl = document.querySelector("#btn-search");
 var currentWeatherEl = document.querySelector("#current");
+var noCitiesFoundEl = document.querySelector("#noCitiesFound");
 
 
 
@@ -16,7 +17,7 @@ var loadSavedCities = function(){
         // if any savedCities were found, go through each of them and create a button element under the city search form
         if(savedCities){
             
-        for (i = 0; i < savedCities.length; i++){
+        for (i = 0; i < 7; i++){
             var item = document.createElement("button");
             item.classList=("btn  col-12 mt-3 city-btn");
             item.setAttribute("data-query-value",savedCities[i]);
@@ -80,6 +81,7 @@ var getWeather = function(city){
    
     var APIkey = "568a27ffc728ed645193b7db830d13da";
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+APIkey+"&units=imperial";
+    
 
 
     fetch(queryURL)
@@ -87,27 +89,52 @@ var getWeather = function(city){
             if(response.ok){
                 response.json().then(function(data){
                     console.log(data);
-                    var cityHeading = document.createElement("h1");
+                    // display selected city name, date, and weather icon
+                    var cityHeading = document.createElement("h2");
                     cityHeading.className=("fw-bold");
                     cityHeading.innerHTML=(data.name+" ("+date+")"+"<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png'></img>");
                     currentWeatherEl.appendChild(cityHeading);
-
-                    var currentTemp = document.createElement("h3");
+                    // get and display current temperature
+                    var currentTemp = document.createElement("h5");
+                    currentTemp.className=("mb-4");
                     currentTemp.textContent=("Temp: "+data.main.temp+"\xB0F");
                     currentWeatherEl.appendChild(currentTemp);
+                    // get and display current wind speed
+                    var currentWindSpeed = document.createElement("h5");
+                    currentWindSpeed.className=("mb-4");
+                    currentWindSpeed.textContent=("Wind: "+data.wind.speed+"MPH");
+                    currentWeatherEl.appendChild(currentWindSpeed);
+                    // get and display current humidity
+                    var currentHumidity = document.createElement("h5");
+                    currentHumidity.className=("mb-4");
+                    currentHumidity.textContent=("Humidity: "+data.main.humidity+"%");
+                    currentWeatherEl.appendChild(currentHumidity);
 
+                    // get and display current uv index
+                    var lat = data.coord.lat;
+                    var lon = data.coord.lon;
 
+                    var uvIndexURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=hourly,daily&appid="+APIkey;
+
+                    fetch(uvIndexURL)
+                        .then(function(response){
+                            response.json().then(function(data){
+                                console.log(data);
+                                var uvIndex = document.createElement("h5");
+                                uvIndex.className=("mb-4");
+                                uvIndex.textContent=("UV Index: "+data.current.uvi);
+                                currentWeatherEl.appendChild(uvIndex);
+                        })
+                    })
+                    
                 })
             }// end of if statement
             else{
-                console.log("response is not okay");
+                var noCities = document.createElement("h1");
+                noCities.textContent=("No cities found, please try again.");
+                currentWeatherEl.appendChild(noCities);
             }// end of else statement
         })
-
-
-
-
-
 }
 
 
