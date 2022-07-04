@@ -26,3 +26,10 @@ body{
     background-color: purple!important;
     color: #ffffff;
 }
+.card{
+    background-color: #33475A;
+    color:#ffffff;
+}
+.small-icon{
+    width: 60px;
+}
