@@ -36,4 +36,7 @@ View the repository: https://github.com/dmadon/weather-dashboard/
 
 ## Preview
 
+![image](https://user-images.githubusercontent.com/99852346/177389175-463a8481-9be9-4705-a731-f1bfff5e8cc1.png)
+
+
 
