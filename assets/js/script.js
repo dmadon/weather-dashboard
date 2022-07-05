@@ -20,12 +20,13 @@ var loadSavedCities = function(){
         if(savedCities){
             
         for (i = 0; i < 7; i++){
+            if(savedCities[i]){
             var item = document.createElement("button");
             item.classList=("btn  col-12 mt-3 city-btn");
             item.setAttribute("data-query-value",savedCities[i]);
             item.textContent=(savedCities[i]);
             savedCitiesEl.appendChild(item);
-            
+            }
         }
     }
 }// end loadSavedCities function
@@ -90,15 +91,14 @@ var getWeather = function(city){
         .then(function(response){
             if(response.ok){
                 response.json().then(function(data){
-                    console.log(data);
                     var currentWeatherArticle = document.createElement("article");
                     currentWeatherArticle.id=("article");
 
                     
                     // display selected city name, date, and weather icon
                     var cityHeading = document.createElement("h2");
-                    cityHeading.className=("fw-bold");
-                    cityHeading.innerHTML=(data.name+" ("+date+")"+"<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png'></img>");
+                    cityHeading.className=("fw-bold mt-2");
+                    cityHeading.innerHTML=(data.name+" ("+date+") "+"<img src='http://openweathermap.org/img/wn/"+data.weather[0].icon+"@2x.png' class='icon rounded'></img>");
                     currentWeatherArticle.appendChild(cityHeading);
                     // get and display current temperature
                     var currentTemp = document.createElement("h5");
@@ -119,13 +119,12 @@ var getWeather = function(city){
                     // get and display current uv index using a second API call because it seems you can only get UV index info by latitude and longitude
                     var lat = data.coord.lat;
                     var lon = data.coord.lon;
-
+                    // use lat & lon coordinates received from the first api call to make the second api call for the uv index information
                     var uvIndexURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=hourly&appid="+APIkey+"&units=imperial";
 
                     fetch(uvIndexURL)
                         .then(function(response){
                             response.json().then(function(data){
-                                console.log(data);
                                 // create an h5 element for the UV index
                                 var uvIndex = document.createElement("h5");
                                 uvIndex.className=("mb-4");
@@ -177,7 +176,7 @@ var getWeather = function(city){
                                 // get and display the weather icon that corresponds to that date
                                 var forecastIcon = document.createElement("img");
                                 forecastIcon.src=("http://openweathermap.org/img/wn/"+data.daily[i].weather[0].icon+"@2x.png");
-                                forecastIcon.className=("small-icon");
+                                forecastIcon.className=("icon rounded");
                                 // get and display forecasted day temp for forecasted day
                                 var forecastTemp = document.createElement("h5");
                                 forecastTemp.textContent=("Temp: "+data.daily[i].temp.day+"\xB0F");
@@ -218,47 +217,52 @@ var getWeather = function(city){
 
                         return;
                 })// end of if statement for when response is OK
-        
-            
-
             }
-            
-
             else if (document.getElementById("article")){
-                    document.getElementById("article").remove();
-                    forecastWrapperEl.classList.add("hidden");
-                    var noCities = document.createElement("h1");
-                    noCities.id=("warningMsg");
-                    noCities.textContent=("No cities found, please try again.");          
-                    currentWeatherEl.appendChild(noCities);
-                }
-                else{  
-                    var noCities = document.createElement("h1");
-                    noCities.id=("warningMsg");
-                    noCities.textContent=("No cities found, please try again.");  
-                    currentWeatherEl.appendChild(noCities);
-                }
+                document.getElementById("article").remove();
+                forecastWrapperEl.classList.add("hidden");
+                var noCities = document.createElement("h1");
+                noCities.id=("warningMsg");
+                noCities.textContent=("No cities found, please try again.");          
+                currentWeatherEl.appendChild(noCities);
+            }
+            else{  
+                var noCities = document.createElement("h1");
+                noCities.id=("warningMsg");
+                noCities.textContent=("No cities found, please try again.");  
+                currentWeatherEl.appendChild(noCities);
+            }// end of else statement
                 
-        })// end of else statement
-           
-}
+        })//end of .then(function(response)) method after fetch call
+        
+        .catch(function(error){
+            if (document.getElementById("article")){
+                document.getElementById("article").remove();
+                forecastWrapperEl.classList.add("hidden");
+                var error = document.createElement("h1");
+                error.id=("errorMsg");
+                error.textContent=("Could not connect to server, please try again later.");          
+                currentWeatherEl.appendChild(error);
+            }
+        })
+
+}// end of getWeather() function
 
 
 
 
 var savedCityBtn = function(event){
+    // get the data-query-value from the element that was clicked and set it as the city name
     var city = event.target.getAttribute("data-query-value");
+    // check to see if there is a value for city. if there is no city value, that means the element that was clicked was not a saved city button
+    if(city){
+    // call the getWeather() function if there is a city value for the clicked element, indicating that the element that was clicked is a saved city button
+    // note: this if statement was necessary because if a user clicked in the white space between buttons, since the click event was delegated from the parent element,
+    // the user would activate the warning message that no cities were found. this way we only execute the getWeather() function if user clicked a saved city button.
+    // all other clicks in the parent element are ignored. 
     getWeather(city);
+    }
 }
-
-
-
-
-
-
-
-
-
 
 
 

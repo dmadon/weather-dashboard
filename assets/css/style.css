@@ -30,7 +30,8 @@ body{
     background-color: #33475A;
     color:#ffffff;
 }
-.small-icon{
+.icon{
+    background-color: #B7B7B7;
     width: 60px;
 }
 h3, h5{
