@@ -116,7 +116,7 @@ var getWeather = function(city){
                     currentHumidity.textContent=("Humidity: "+data.main.humidity+"%");
                     currentWeatherArticle.appendChild(currentHumidity);
 
-                    // get and display current uv index
+                    // get and display current uv index using a second API call because it seems you can only get UV index info by latitude and longitude
                     var lat = data.coord.lat;
                     var lon = data.coord.lon;
 
@@ -126,9 +126,11 @@ var getWeather = function(city){
                         .then(function(response){
                             response.json().then(function(data){
                                 console.log(data);
+                                // create an h5 element for the UV index
                                 var uvIndex = document.createElement("h5");
                                 uvIndex.className=("mb-4");
                                 currentWeatherArticle.appendChild(uvIndex);
+                                // color code the UV index data
                                 if(data.current.uvi<=2){
                                     uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-success'>"+data.current.uvi+"</span>");
                                 }
@@ -145,70 +147,63 @@ var getWeather = function(city){
                                     uvIndex.innerHTML=("UV Index: <span class= 'mb-4 p-2 rounded bg-info'>"+data.current.uvi+"</span>");
                                 }
 
-                                
-
                                 // 5-day forecast
 
+                                // remove forcast data from previous search
                                 if(document.getElementsByClassName("card")){
                                     document.querySelectorAll(".card").forEach(function(a){
                                         a.remove()
                                       })
                                 }
 
-                              
+                                // show the forecast row element
                                 forecastWrapperEl.classList.remove("hidden");
                                 
-                                
+                                // loop through the daily forecast data
                                 for(i=1; i<6; i++){
-                                                                
+                                
+                                // get the timestamp of the sunrise for the day at given index, so we can extract the date
                                 var timeStampSunrise = (data.daily[i].sunrise*1000);
                                 var convertDate = new Date(timeStampSunrise);
-                                
+                                // format the date for display on the card
                                 var forecastDate = convertDate.getMonth()+1+"/"+convertDate.getDate()+"/"+convertDate.getFullYear();
-
+                                // create a card to hold each day's forecast data
                                 var forecastCard = document.createElement("div");
                                 forecastCard.classList=("card p-2 col-md-2 mb-3 mb-md-0");
-                                
+                                // set the card title to the date of the forecasted day
                                 var forecastTitle = document.createElement("h4");
                                 forecastTitle.classList=("fw-bold");
                                 forecastTitle.textContent=(forecastDate);
-
+                                // get and display the weather icon that corresponds to that date
                                 var forecastIcon = document.createElement("img");
                                 forecastIcon.src=("http://openweathermap.org/img/wn/"+data.daily[i].weather[0].icon+"@2x.png");
                                 forecastIcon.className=("small-icon");
-
+                                // get and display forecasted day temp for forecasted day
                                 var forecastTemp = document.createElement("h5");
                                 forecastTemp.textContent=("Temp: "+data.daily[i].temp.day+"\xB0F");
-
+                                // get and display forecasted wind speed for forecasted day
                                 var forecastWind = document.createElement("h5");
                                 forecastWind.textContent=("Wind: "+data.daily[i].wind_speed+" MPH");
-
+                                // get and display forecasted humidity percentage for forecasated day
                                 var forecastHumidity = document.createElement("h5");
                                 forecastHumidity.textContent=("Humidity: "+data.daily[i].humidity+"%");
                                 
-                                
+                                // append data to forecast card
                                 forecastCard.appendChild(forecastTitle);
                                 forecastCard.appendChild(forecastIcon);
                                 forecastCard.appendChild(forecastTemp);
                                 forecastCard.appendChild(forecastWind);
                                 forecastCard.appendChild(forecastHumidity);
 
-                                
+                                // append card to forecast div element
                                 forecastEl.appendChild(forecastCard);
-                                
-                                
 
                                 }// end of for loop
-
-                                
-                          
                             })
 
-
-
-
-
                         })
+
+
                         if(document.getElementById("article")){
                             document.getElementById("article").remove();
                             currentWeatherEl.appendChild(currentWeatherArticle);
@@ -221,22 +216,6 @@ var getWeather = function(city){
                             currentWeatherEl.appendChild(currentWeatherArticle);
                         }
 
-
-                        
-                        // if(document.getElementsByClassName("card")){
-                        //     document.getElementsByClassName("card").remove();
-                        //     forecastEl.appendChild(forecastCard);
-                        // }
-                        // else if(document.getElementById("warningMsg")){
-                        //     document.getElementById("warningMsg").remove();
-                        //     currentWeatherEl.appendChild(currentWeatherArticle);
-                        // }
-                        // else{  
-                        //     currentWeatherEl.appendChild(currentWeatherArticle);
-                        // }
-
-
-                        
                         return;
                 })// end of if statement for when response is OK
         
