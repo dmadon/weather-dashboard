@@ -256,11 +256,11 @@ var savedCityBtn = function(event){
     var city = event.target.getAttribute("data-query-value");
     // check to see if there is a value for city. if there is no city value, that means the element that was clicked was not a saved city button
     if(city){
-    // call the getWeather() function if there is a city value for the clicked element, indicating that the element that was clicked is a saved city button
-    // note: this if statement was necessary because if a user clicked in the white space between buttons, since the click event was delegated from the parent element,
-    // the user would activate the warning message that no cities were found. this way we only execute the getWeather() function if user clicked a saved city button.
-    // all other clicks in the parent element are ignored. 
-    getWeather(city);
+        // call the getWeather() function if there is a city value for the clicked element, indicating that the element that was clicked is a saved city button.
+        // note: this if statement was necessary because if a user clicked in the white space between buttons, since the click event was delegated from the parent element,
+        // the user would activate the warning message that no cities were found. this way we only execute the getWeather() function if user clicked a saved city button.
+        // all other clicks in the parent element are ignored. 
+        getWeather(city);
     }
 }
 
