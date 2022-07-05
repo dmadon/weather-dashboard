@@ -149,17 +149,20 @@ var getWeather = function(city){
 
                                 // 5-day forecast
 
-                                var forecastHeader = document.createElement("h3");
-                                forecastHeader.classList=("fw-bold pl-0 mt-3");
-                                forecastHeader.textContent=("5-Day Forecast:");
+                                if(document.getElementsByClassName("card")){
+                                    document.querySelectorAll(".card").forEach(function(a){
+                                        a.remove()
+                                      })
+                                }
+
+                              
+                                forecastWrapperEl.classList.remove("hidden");
                                 
                                 
                                 for(i=1; i<6; i++){
                                                                 
                                 var timeStampSunrise = (data.daily[i].sunrise*1000);
-                                console.log(timeStampSunrise);
                                 var convertDate = new Date(timeStampSunrise);
-                                console.log(convertDate);
                                 
                                 var forecastDate = convertDate.getMonth()+1+"/"+convertDate.getDate()+"/"+convertDate.getFullYear();
 
@@ -189,12 +192,16 @@ var getWeather = function(city){
                                 forecastCard.appendChild(forecastTemp);
                                 forecastCard.appendChild(forecastWind);
                                 forecastCard.appendChild(forecastHumidity);
+
+                                
                                 forecastEl.appendChild(forecastCard);
                                 
                                 
 
                                 }// end of for loop
-                                forecastWrapperEl.prepend(forecastHeader);
+
+                                
+                          
                             })
 
 
@@ -212,19 +219,35 @@ var getWeather = function(city){
                         }
                         else{  
                             currentWeatherEl.appendChild(currentWeatherArticle);
-                        }     
+                        }
+
+
+                        
+                        // if(document.getElementsByClassName("card")){
+                        //     document.getElementsByClassName("card").remove();
+                        //     forecastEl.appendChild(forecastCard);
+                        // }
+                        // else if(document.getElementById("warningMsg")){
+                        //     document.getElementById("warningMsg").remove();
+                        //     currentWeatherEl.appendChild(currentWeatherArticle);
+                        // }
+                        // else{  
+                        //     currentWeatherEl.appendChild(currentWeatherArticle);
+                        // }
+
+
+                        
+                        return;
                 })// end of if statement for when response is OK
         
             
 
-            .catch(function(error) {
-                $("#errorModal").modal();
-            })
-        }
+            }
             
 
             else if (document.getElementById("article")){
                     document.getElementById("article").remove();
+                    forecastWrapperEl.classList.add("hidden");
                     var noCities = document.createElement("h1");
                     noCities.id=("warningMsg");
                     noCities.textContent=("No cities found, please try again.");          
