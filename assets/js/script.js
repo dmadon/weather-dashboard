@@ -150,7 +150,7 @@ var getWeather = function(city){
                                 // 5-day forecast
 
                                 var forecastHeader = document.createElement("h3");
-                                forecastHeader.classList=("fw-bold d-block py-2");
+                                forecastHeader.classList=("fw-bold pl-0 mt-3");
                                 forecastHeader.textContent=("5-Day Forecast:");
                                 
                                 
@@ -164,7 +164,7 @@ var getWeather = function(city){
                                 var forecastDate = convertDate.getMonth()+1+"/"+convertDate.getDate()+"/"+convertDate.getFullYear();
 
                                 var forecastCard = document.createElement("div");
-                                forecastCard.classList=("card p-2 col-2");
+                                forecastCard.classList=("card p-2 col-md-2 mb-3 mb-md-0");
                                 
                                 var forecastTitle = document.createElement("h4");
                                 forecastTitle.classList=("fw-bold");

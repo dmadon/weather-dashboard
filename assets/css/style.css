@@ -33,3 +33,7 @@ body{
 .small-icon{
     width: 60px;
 }
+h3, h5{
+    line-height: 2; 
+    padding-left: 0!important;   
+}
