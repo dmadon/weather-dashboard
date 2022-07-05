@@ -30,9 +30,9 @@ This application required implementing the following functionality:
 
 ## Links
 
-View the deployed application:
+View the deployed application: https://dmadon.github.io/weather-dashboard/
 
-View the repository:
+View the repository: https://github.com/dmadon/weather-dashboard/
 
 ## Preview
 
